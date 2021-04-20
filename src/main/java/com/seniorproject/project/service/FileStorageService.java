@@ -56,4 +56,9 @@ public class FileStorageService {
             throw new ProjectException(3002);
         }
     }
+
+    public List<FileStorage> getFileByUserIdFileName(String userId,String fileName){
+
+        return fileStorageRepository.getFileByUserIdFileName(userId,fileName);
+    }
 }

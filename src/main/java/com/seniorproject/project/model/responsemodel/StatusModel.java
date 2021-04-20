@@ -15,6 +15,9 @@ public class StatusModel {
         else if(code ==1001){
             setMessage("Record not found");
         }
+        else if(code == 1999){
+            setMessage("Something went wrong");
+        }
         else if(code == 2000){
             setMessage("Exception Error");
         }
@@ -23,6 +26,9 @@ public class StatusModel {
         }
         else if (code == 2002){
             setMessage("Unable to delete this account");
+        }
+        else if (code == 2003){
+            setMessage("This username has already been used");
         }
         else if (code == 3000){
             setMessage("File not found");

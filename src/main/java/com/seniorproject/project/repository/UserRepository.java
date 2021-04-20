@@ -29,7 +29,7 @@ public class UserRepository {
     private static final String PASSWORD ="password";
     private static final String FIRSTNAME ="firstname";
     private static final String LASTNAME ="lastname";
-    private static final String TABLENAME = "user";
+    private static final String TABLENAME = "users";
 
     public int insertUser(User user) {
         Map<String, Object> namedParams = new HashMap<>();
@@ -73,6 +73,47 @@ public class UserRepository {
         }catch (Exception ex){
             throw new ProjectException(1899);
         }
+    }
+
+    public List<User> findByUserName(String username){
+        Map<String,Object> params = new HashMap<>();
+        params.put(USERNAME,username);
+        StringJoiner sql = new StringJoiner(" ");
+        sql.add("SELECT");
+        sql.add(getAllFields());
+        sql.add("FROM");
+        sql.add(TABLENAME);
+        sql.add("WHERE");
+        sql.add(USERNAME + " = :"+ USERNAME);
+
+        log.info("{}",sql.toString());
+        try {
+            return namedParameterJdbcTemplate.query(sql.toString(),params,new UserMapper());
+        }catch (Exception ex){
+            log.info(ex.getMessage());
+            throw new ProjectException(1899);
+        }
+
+    }
+
+    public List<User> findByEmail(String email){
+        Map<String,Object> params = new HashMap<>();
+        params.put(EMAIL,email);
+        StringJoiner sql = new StringJoiner(" ");
+        sql.add("SELECT");
+        sql.add(getAllFields());
+        sql.add("FROM");
+        sql.add(TABLENAME);
+        sql.add("WHERE");
+        sql.add(EMAIL + " = :"+ EMAIL);
+
+        log.info("{}",sql.toString());
+        try {
+            return namedParameterJdbcTemplate.query(sql.toString(),params,new UserMapper());
+        }catch (Exception ex){
+            throw new ProjectException(1899);
+        }
+
     }
 
     public User updateUserById(String id, User user){

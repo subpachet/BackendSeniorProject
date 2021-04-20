@@ -19,13 +19,24 @@ public class UserService {
     private UserRepository userRepository;
 
     public User createUser(User user){
-        int isSuccess =userRepository.insertUser(user) ;
-        if(isSuccess == 1){
-            return user;
+        List<User> users = userRepository.findByUserName(user.getUserName());
+        List<User> googleUsers = userRepository.findByEmail(user.getEmail());
+        if((users != null && users.size()>0) && googleUsers.size()<1 && !users.get(0).getUserName().equals("")){
+            throw new ProjectException(2003);
+        }
+        else if (googleUsers != null && googleUsers.size()> 0){
+            return googleUsers.get(0);
         }
         else{
-            throw new ProjectException(2001);
+            int isSuccess =userRepository.insertUser(user) ;
+            if(isSuccess == 1){
+                return user;
+            }
+            else{
+                throw new ProjectException(2001);
+            }
         }
+
     }
 
     public AllUserResponse getAllUser(){

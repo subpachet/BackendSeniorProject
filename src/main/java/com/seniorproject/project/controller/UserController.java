@@ -15,6 +15,7 @@ import java.util.StringJoiner;
 
 @RestController
 @Slf4j
+@CrossOrigin
 public class UserController {
 
     @Autowired

@@ -24,7 +24,7 @@ public class FileStorageRepository {
     private static final String FILENAME = "file_name";
     private static final String PATH = "path";
     private static final String USER_ID = "user_id";
-    private static final String TABLENAME = "filestorage";
+    private static final String TABLENAME = "file_storage";
 
 
     public List<FileStorage> getAllFiles(){
@@ -40,6 +40,30 @@ public class FileStorageRepository {
         }catch (Exception ex){
             throw new ProjectException(1999);
         }
+    }
+
+    public List<FileStorage> getFileByUserIdFileName(String userId,String fileName){
+        Map<String,Object> params = new HashMap<>();
+        params.put(USER_ID,userId);
+        params.put(FILENAME,fileName);
+        StringJoiner sql = new StringJoiner(" ");
+        sql.add("SELECT");
+        sql.add(getAllFields());
+        sql.add("FROM");
+        sql.add(TABLENAME);
+        sql.add("WHERE");
+        sql.add(USER_ID);
+        sql.add("= :user_id and");
+        sql.add(FILENAME);
+        sql.add("= :"+ FILENAME);
+
+        log.info("{}",sql.toString());
+        try{
+            return namedParameterJdbcTemplate.query(sql.toString(),params,new FileStorageMapper());
+        }catch (Exception e){
+            throw new ProjectException(3000);
+        }
+
     }
 
     private String getAllFields(){
